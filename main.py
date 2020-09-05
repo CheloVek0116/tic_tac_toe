@@ -1,17 +1,23 @@
-__version__ = '0.3'
+__version__ = '0.4'
 
-from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
+import uuid
+
+from kivymd.app import MDApp
+
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.lang.builder import Builder
+
+sm = ScreenManager()
+
+Builder.load_file('./screens.kv')
 
 
 class Player:
-    def __init__(self, name: str, attacker: bool):
+    def __init__(self, name: str, attacker: bool, pid: str = uuid.uuid4(), score: int = 0):
+        self.id = pid
         self.name: str = name
         self._attacker: bool = attacker
-        self._score: bool = 0
+        self._score: bool = score
 
     @property
     def is_attacker(self):
@@ -33,40 +39,23 @@ class Player:
         return self.name
 
 
-class XVSOApp(App):
-    def __init__(self, *args, **kwargs):
-        self._rows: int = 3
-        self._cols: int = 3
-        self._field = ['' for _ in range(self._rows * self._cols)]
+class MenuScreen(Screen):
+    pass
 
-        self.XPlayer: Player = Player('X', True)
-        self.OPlayer: Player = Player('O', False)
+
+class GameMenuScreen(Screen):
+    pass
+
+
+class GameScreen(Screen):
+    def __init__(self, *args, **kwargs):
+        self._field = ['' for _ in range(9)]
+        self._finish: bool = False
+        self.XPlayer: Player = Player(name='X', attacker=True)
+        self.OPlayer: Player = Player(name='O', attacker=False)
         self._players = (self.XPlayer, self.OPlayer)
         self.winner: Player = None
-
-        self._finish: bool = False
         super().__init__(*args, **kwargs)
-
-    @property
-    def attacker(self) -> Player:
-        for player in self._players:
-            if player.is_attacker:
-                return player
-
-    def build(self):
-        layout = BoxLayout(orientation='vertical', spacing=5)
-        self.label = Label(text=f'Ходит "{self.attacker}"', size_hint=(1, .1), valign='middle', halign='center')
-        self.score_text = Label(text=f'X  0 : 0  O', size_hint=(1, .2), font_size='20sp', valign='middle', halign='center')
-        self.grid = GridLayout(cols=self._cols)
-        for point_id in range(len(self._field)):
-            button = Button(ids={'id': point_id},
-                            on_press=self.point_click)
-            self.grid.add_widget(button)
-
-        layout.add_widget(self.score_text)
-        layout.add_widget(self.label)
-        layout.add_widget(self.grid)
-        return layout
 
     def switch_attacker(self):
         for player in self._players:
@@ -76,7 +65,7 @@ class XVSOApp(App):
         if self._finish:
             self.clear_field()
             self._finish = False
-            self.label.text = f'Ходит "{self.attacker}"'
+            self.ids['attacker_text'].text = f'Ходит "{self.attacker}"'
             return
 
         btn_id = instance.ids['id']
@@ -88,23 +77,23 @@ class XVSOApp(App):
             self.check_win(btn_id)
             self.switch_attacker()
             if not self.winner and not all(self._field):
-                self.label.text = f'Ходит "{self.attacker}"'
+                self.ids['attacker_text'].text = f'Ходит "{self.attacker}"'
         if self.winner:
-            self.label.text = f'Выйграл "{self.winner}"\nТыкни на любую клетку'
+            self.ids['attacker_text'].text = f'Выйграл "{self.winner}"\nТыкни на любую клетку'
             self.winner.add_point_to_score()
             self.winner = None
             self._finish = True
         elif all(self._field):
             for player in self._players:
                 player.remove_point_from_score()
-            self.label.text = 'Ничья\nТыкни на любую клетку'
+            self.ids['attacker_text'].text = 'Ничья\nТыкни на любую клетку'
             self.winner = None
             self._finish = True
 
         self.update_score()
 
     def update_score(self):
-        self.score_text.text = f'X  {self.XPlayer.get_score()} : {self.OPlayer.get_score()}  O'
+        self.ids['score_text'].text = f'X  {self.XPlayer.get_score()} : {self.OPlayer.get_score()}  O'
 
     def check_win(self, point_id):
         win_combinations = (
@@ -129,7 +118,21 @@ class XVSOApp(App):
     def clear_field(self):
         for i in range(len(self._field)):
             self._field[i] = ''
-            self.grid.children[i].text = ''
+            self.ids['field_grid'].children[i].text = ''
+
+    @property
+    def attacker(self) -> Player:
+        for player in self._players:
+            if player.is_attacker:
+                return player
+
+
+class XVSOApp(MDApp):
+    def build(self):
+        sm.add_widget(MenuScreen(name='menu'))
+        sm.add_widget(GameMenuScreen(name='game_menu'))
+        sm.add_widget(GameScreen(name='game'))
+        return sm
 
 
 XVSOApp().run()
