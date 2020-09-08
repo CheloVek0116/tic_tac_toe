@@ -1,7 +1,7 @@
 from kivymd.uix.dialog import MDDialog
 
 
-class WinnerDialog(MDDialog):
+class EndGameDialog(MDDialog):
     closing = False
     auto_dismiss = False
 

@@ -1,8 +1,8 @@
-from kivy.uix.screenmanager import Screen
 from kivy.clock import mainthread
+from kivy.uix.screenmanager import Screen
 
-from src.player import OnlinePlayer
 from src.internet.discovery_protocol import DiscoveryProtocol
+from src.player import OnlinePlayer
 
 
 class OnlineLoadingScreen(Screen):

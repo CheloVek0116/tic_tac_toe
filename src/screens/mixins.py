@@ -3,7 +3,7 @@ from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 
 from src.player import PlayerBase
-from src.screens.winner_dialog import WinnerDialog
+from src.screens.end_game_dialog import EndGameDialog
 
 
 class GameMixin(Screen):
@@ -59,7 +59,7 @@ class GameMixin(Screen):
 
     def check_nobody_win(self):
         if all([point.text for point in self._field]):
-            self.dialog = WinnerDialog(
+            self.dialog = EndGameDialog(
                 title='Ничья',
                 text='Продолжить?',
                 buttons=[
@@ -96,7 +96,7 @@ class GameMixin(Screen):
                 break
 
         if self.winner:
-            self.dialog = WinnerDialog(
+            self.dialog = EndGameDialog(
                 title=f'Выйграл "{self.winner.name}"',
                 text='Продолжить?',
                 buttons=[
