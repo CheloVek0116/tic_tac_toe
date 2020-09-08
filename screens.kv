@@ -8,6 +8,7 @@
             text: 'Quit'
             on_press: app.stop()
 
+
 <GameMenuScreen>:
     MDBoxLayout:
         orientation: 'vertical'
@@ -15,8 +16,22 @@
             text: 'На одном экране'
             on_press: root.manager.current = 'game'
         Button:
+            text: 'Online'
+            on_press: root.manager.current = 'online_loading'
+        Button:
             text: 'Главное меню'
             on_press: root.manager.current = 'menu'
+
+
+<OnlineLoadingScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDSpinner:
+            size_hint: (.3, .3)
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            active: True 
+
 
 <GameScreen>:
     MDBoxLayout:
@@ -37,39 +52,24 @@
         GridLayout:
             id: field_grid
             cols: 3
-            Button:
-                id: btn_0
-                ids: {'id': 0}
-                on_press: root.point_click(self)
-            Button:
-                id: 'btn_1'
-                ids: {'id': 1}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_2
-                ids: {'id': 2}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_3
-                ids: {'id': 3}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_4
-                ids: {'id': 4}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_5
-                ids: {'id': 5}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_6
-                ids: {'id': 6}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_7
-                ids: {'id': 7}
-                on_press: root.point_click(self)
-            Button:
-                id: btn_8
-                ids: {'id': 8}
-                on_press: root.point_click(self)
+
+<OnlineGameScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDLabel:
+            id: score_text
+            text: f"X  0:0  O"
+            halign: "center"
+            size_hint: (1, .2)
+            font_size: '20sp'
+            valign: 'middle'
+        MDLabel:
+            id: attacker_text
+            text: f"Ходит X"
+            halign: "center"
+            valign: 'middle'
+            size_hint:(1, .1)
+        GridLayout:
+            id: field_grid
+            cols: 3
+

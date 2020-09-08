@@ -88,7 +88,7 @@ fullscreen = 1
 #android.presplash_lottie = "path/to/lottie/file.json"
 
 # (list) Permissions
-#android.permissions = INTERNET
+android.permissions = INTERNET
 
 # (int) Target Android API, should be as high as possible.
 #android.api = 27

@@ -1,3 +1,4 @@
 bin/
 .buildozer/
 .env/
+__pycache__/
