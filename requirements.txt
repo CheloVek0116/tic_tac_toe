@@ -1,0 +1,4 @@
+Cython==0.29.21
+buildozer @ git+https://github.com/kivy/buildozer@7bf9f397098d3185a953f8fdf265834f8da83378
+Kivy @ git+https://github.com/kivy/kivy.git@f34c43f235f35767ed04765a90d68b23807436ba
+kivymd==0.104.1
