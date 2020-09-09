@@ -1,11 +1,13 @@
 from kivy.clock import mainthread
-from kivy.uix.screenmanager import Screen
 
 from src.internet.discovery_protocol import DiscoveryProtocol
 from src.player import OnlinePlayer
+from src.screens.mixins import ScreenMixin
 
 
-class OnlineLoadingScreen(Screen):
+class OnlineLoadingScreen(ScreenMixin):
+    kv_file = 'online_loading_screen.kv'
+
     discovery = None
     player = None
     opponent = None

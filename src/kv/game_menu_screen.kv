@@ -1,0 +1,12 @@
+<GameMenuScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'На одном экране'
+            on_press: root.manager.current = 'game'
+        Button:
+            text: 'Online'
+            on_press: root.manager.current = 'online_loading'
+        Button:
+            text: 'Главное меню'
+            on_press: root.manager.current = 'menu'

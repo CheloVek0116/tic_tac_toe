@@ -1,4 +1,8 @@
+import os
+import json
+
 from kivymd.uix.button import MDFlatButton
+from kivy.lang.builder import Builder
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 
@@ -6,11 +10,30 @@ from src.player import PlayerBase
 from src.screens.end_game_dialog import EndGameDialog
 
 
-class GameMixin(Screen):
-    player: PlayerBase = None
-    opponent: PlayerBase = None
-    winner: PlayerBase = None
-    _players: (PlayerBase, PlayerBase) = (player, opponent)
+class ScreenMixin(Screen):
+    kv_file = None
+
+    def __init__(self, **kwargs):
+        self.set_dirs()
+        kv_dir = self.dirs.get('kv_dir')
+        kv_file = os.path.join(kv_dir, self.kv_file)
+        if kv_file not in Builder.files:
+            Builder.load_file(kv_file)
+        super().__init__(**kwargs)
+
+    def set_dirs(self):
+        from kivymd.app import MDApp
+        app = MDApp.get_running_app()
+        self.dirs = json.loads(app.config.get('dirs', 'defaults'))
+
+
+class GameMixin(ScreenMixin):
+    kv_file = 'game_mixin.kv'
+
+    winner = None
+    player = None
+    opponent = None
+    _players = (player, opponent)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -20,6 +43,10 @@ class GameMixin(Screen):
             self.ids['field_grid'].add_widget(point)
 
     def drop_state(self):
+        for player in self._players:
+            player.clear_score()
+            if player.name == 'X' and not player.is_attacker:
+                self.switch_attacker()
         self.ids['attacker_text'].text = 'Ходит Х'
         self.ids['score_text'].text = 'X  0:0  O'
 

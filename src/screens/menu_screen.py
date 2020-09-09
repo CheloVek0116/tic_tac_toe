@@ -1,5 +1,5 @@
-from kivy.uix.screenmanager import Screen
+from src.screens.mixins import ScreenMixin
 
 
-class MenuScreen(Screen):
-    pass
+class MenuScreen(ScreenMixin):
+    kv_file = 'menu_screen.kv'

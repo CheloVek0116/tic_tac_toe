@@ -1,0 +1,20 @@
+<GameMixin>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDLabel:
+            id: score_text
+            text: f"X  0:0  O"
+            halign: "center"
+            size_hint: (1, .2)
+            font_size: '20sp'
+            valign: 'middle'
+        MDLabel:
+            id: attacker_text
+            text: f"Ходит X"
+            halign: "center"
+            valign: 'middle'
+            size_hint:(1, .1)
+        GridLayout:
+            id: field_grid
+            cols: 3
+

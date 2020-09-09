@@ -1,0 +1,10 @@
+<MenuScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Играть'
+            on_press: root.manager.current = 'game_menu'
+        Button:
+            text: 'Quit'
+            on_press: app.stop()
+

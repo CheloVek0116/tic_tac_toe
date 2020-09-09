@@ -3,11 +3,11 @@ XVSO app
 """
 __version__ = '0.5'
 
+import os
 
 from kivymd.app import MDApp
-
-from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import ScreenManager
+
 from src.screens import (
     GameMenuScreen,
     GameScreen,
@@ -16,13 +16,26 @@ from src.screens import (
     OnlineLoadingScreen,
 )
 
-Builder.load_file('./screens.kv')
-
 
 class XVSOApp(MDApp):
     """
     Главный модуль приложения
     """
+    def build_config(self, config):
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        SOURCE_DIR = os.path.join(BASE_DIR, 'src')
+        KV_DIR = os.path.join(SOURCE_DIR, 'kv')
+        import json
+        DIRS = {
+            'defaults': json.dumps({
+                "base_dir": BASE_DIR,
+                "source_dir": SOURCE_DIR,
+                "kv_dir": KV_DIR,
+            })
+        }
+
+        config.setdefaults('dirs', DIRS)
+
     def build(self):
         screen_manager = ScreenManager()
 
@@ -34,4 +47,6 @@ class XVSOApp(MDApp):
         return screen_manager
 
 
-XVSOApp().run()
+if __name__ == '__main__':
+    app = XVSOApp()
+    app.run()
